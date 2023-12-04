@@ -1,25 +1,61 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveTrainSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.DistanceSensorSubsystem;
 
 public class ArcadeDrive extends CommandBase {
-  public ArcadeDrive() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private final DriveTrainSubsystem drivetrainSubsystem;
+  private final XboxController joystick;
+  private final DistanceSensorSubsystem distanceSensorSubsystem;
+
+  public ArcadeDrive(DriveTrainSubsystem drivetrainSubsystem, XboxController joystick, DistanceSensorSubsystem distanceSensorSubsystem) {
+    this.drivetrainSubsystem = drivetrainSubsystem;
+    this.joystick = joystick;
+    this.distanceSensorSubsystem = distanceSensorSubsystem;
+    // Declare subsystem dependencies here
+    addRequirements(this.drivetrainSubsystem);
   }
 
-  // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // Initialization logic if needed
+  }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    double target = 0;
+    if (distanceSensorSubsystem.getDistance() <= target){
+      drivetrainSubsystem.brake();
 
-  // Called once the command ends or is interrupted.
+    }
+    else{
+      double speed = joystick.getLeftY();
+      if (speed > 0) {
+        drivetrainSubsystem.setPower(speed * 0.5);
+      } else if (speed < 0) {
+        drivetrainSubsystem.setPower(speed * 0.5 - 0.5);
+      } else {
+        drivetrainSubsystem.brake();
+      }
+      double turn = joystick.getLeftX();
+      if (turn > 0){
+        drivetrainSubsystem.TurnLeft(turn);
+      }
+      if (turn < 0){
+        drivetrainSubsystem.TurnRight(turn);
+      }
+    }
+
+  }
+
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drivetrainSubsystem.brake();
+    
+  }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

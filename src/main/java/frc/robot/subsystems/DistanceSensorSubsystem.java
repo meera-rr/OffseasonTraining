@@ -1,17 +1,20 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Ultrasonic;
 
-public class DistanceSensorSubsystem extends SubsystemBase {
-  // create your private AnalogPotentiometer instance variable
-  public DistanceSensorSubsystem() {
-    // instantiate your sensor
-  }
-  
-  // make a getDistance method
+public class DistanceSensorSubsystem {
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+    private Ultrasonic m_rangeFinder;
+    public DistanceSensorSubsystem() {
+        m_rangeFinder = new Ultrasonic(1, 2);
+    }
+    public double getDistance(){
+      double distance = m_rangeFinder.getRangeInches();
+      return distance;
+    }
   }
-}
